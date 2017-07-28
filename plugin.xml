@@ -52,8 +52,20 @@
         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
             <string>This app needs access to your Photo Library to include a screenshot with user feedback.</string>
         </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                            <string>ha$IOS_APP_ID</string>
+                    </array>
+                </dict>
+        </array>
+        </config-file>
         <header-file src="src/ios/HockeyApp.h" />
         <source-file src="src/ios/HockeyApp.m" />
+        <header-file src="src/ios/AppDelegate+HockeyApp.h" />
+        <source-file src="src/ios/AppDelegate+HockeyApp.m" />
         <resource-file src="src/ios/HockeySDK.embeddedframework/HockeySDKResources.bundle" />
         <framework src="src/ios/HockeySDK.embeddedframework/HockeySDK.framework" custom="true" />
         <framework src="libstdc++.dylib" />
