@@ -44,7 +44,7 @@
 
         // Set authentication mode prior to verifying the user
         NSInteger authType = BITAuthenticatorIdentificationTypeAnonymous;
-        [[BITHockeyManager sharedHockeyManager].authenticator setIdentificationType:BITAuthenticatorIdentificationTypeHockeyAppUser];
+        /*[[BITHockeyManager sharedHockeyManager].authenticator setIdentificationType:BITAuthenticatorIdentificationTypeHockeyAppUser];*/
         if ([arguments count] >= 3) {
             NSString *authTypeString = [arguments objectAtIndex:1];
             authType = [authTypeString intValue];
@@ -54,14 +54,14 @@
             [[BITHockeyManager sharedHockeyManager].authenticator setIdentificationType:authType];
         }
 
-        if (authType == BITAuthenticatorIdentificationTypeAnonymous) {
+        /*if (authType == BITAuthenticatorIdentificationTypeAnonymous) {*/
             [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
             initialized = YES;
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        } else {
+        /*} else {
             // Non-anonymous validation will crash the app, so return an error to indicate what is actually happening
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hockeyapp cordova plugin: non-anonymous app validation not currently supported"];
-        }
+        }*/
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hockeyapp cordova plugin: missing arguments!"];
     }
