@@ -228,7 +228,9 @@ Initializes the HockeyApp plugin, and configures it with the appropriate app ID 
     
     - `VALIDATE`: The end user will not be prompted to authenticate, but the app will try to validate with the HockeyApp service.
 
-    *NOTE: Only the `ANONYMOUS` login mode is supported on iOS, and therefore, you can only use the other modes within Android apps.*
+    - `DEVICE`: The end user will only be redirected to the web to register the device UUID that hockeyApp provide and authorizing it.
+
+    *NOTE: on iOS, scheme registration and AppDelegate openURL handling should be implemented as described on iOS SDK guide (https://support.hockeyapp.net/kb/client-integration-ios-mac-os-x-tvos/authenticating-users-on-ios).*
 
 8. **appSecret** - The app secret as provided by the HockeyApp portal. This parameter only needs to be set if you're setting the `loginMode` parameter to `EMAIL_ONLY`.
 
