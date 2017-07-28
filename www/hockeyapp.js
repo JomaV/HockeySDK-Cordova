@@ -52,7 +52,8 @@ var hockeyapp = {
         ANONYMOUS: 0,
         EMAIL_ONLY: 1,
         EMAIL_PASSWORD: 2,
-        VALIDATE: 3
+        DEVICE: 3,
+        VALIDATE: 4
     }
 };
 
