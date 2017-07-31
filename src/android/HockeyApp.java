@@ -125,6 +125,11 @@ public class HockeyApp extends CordovaPlugin {
                 // LOGIN_MODE_VALIDATE does not currently work on Android, so fail immediately
                 callbackContext.error("The requested login mode is not available on the Android platform");
                 return false;
+            } else if (loginMode == 4) {
+                // LOGIN_MODE_DEVICE on Android is as LOGIN_MODE_ANONYMOUS
+                initialized = true;
+                callbackContext.success();
+                return true;
             }
 
             cordova.getActivity().runOnUiThread(new Runnable() {
@@ -286,6 +291,13 @@ public class HockeyApp extends CordovaPlugin {
                 callbackContext.success();
                 return true;
             }
+        }
+
+        if (action.equals("appId")) {
+            PackageManager packageManager = this.cordova.getActivity().getPackageManager();
+            ApplicationInfo app = packageManager.getApplicationInfo(this.cordova.getActivity().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = app.metaData;
+            String message = bundle.getString("net.hockeyapp.android.APP_ID");
         }
 
         // Unrecognized command

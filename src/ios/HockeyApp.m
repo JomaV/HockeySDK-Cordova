@@ -8,6 +8,7 @@
 {
     self = [super init];
     initialized = NO;
+    appId = nil;
     userEmail = nil;
     userName = nil;
     crashMetaData = [NSMutableDictionary new];
@@ -197,6 +198,13 @@
 
     [self.commandDelegate sendPluginResult:pluginResult
                                 callbackId:command.callbackId];
+}
+
+- (void) appId:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult* pluginResult = nil;
+    NSString *message = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"HockeyAppId"];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 #pragma mark - BITHockeyManagerDelegate

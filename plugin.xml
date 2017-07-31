@@ -20,11 +20,20 @@
         <clobbers target="hockeyApp" />
     </js-module>
     
+    <preference name="TAGS"/>
+
     <platform name="android">
+        <preference name="ANDROID_APP_ID"/>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="HockeyApp">
                 <param name="android-package" value="com.zengularity.cordova.hockeyapp.HockeyApp" />
             </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+              android:name="net.hockeyapp.android.APP_ID"
+              android:value="$ANDROID_APP_ID" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -44,6 +53,7 @@
     </platform>
     
     <platform name="ios">
+        <preference name="IOS_APP_ID"/>
         <config-file target="config.xml" parent="/*">
             <feature name="HockeyApp">
                 <param name="ios-package" value="HockeyApp" />
@@ -51,6 +61,9 @@
         </config-file>
         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
             <string>This app needs access to your Photo Library to include a screenshot with user feedback.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="HockeyAppId">
+            <string>$IOS_APP_ID</string>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
             <array>
@@ -60,7 +73,7 @@
                             <string>ha$IOS_APP_ID</string>
                     </array>
                 </dict>
-        </array>
+            </array>
         </config-file>
         <header-file src="src/ios/HockeyApp.h" />
         <source-file src="src/ios/HockeyApp.m" />

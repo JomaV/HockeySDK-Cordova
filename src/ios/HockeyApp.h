@@ -6,6 +6,7 @@
 @interface HockeyApp : CDVPlugin <BITHockeyManagerDelegate> {
     BOOL initialized;
     BOOL shouldCreateNewFeedbackThread;
+    NSString *appId;
     NSString *userEmail;
     NSString *userName;
     NSMutableDictionary *crashMetaData;
@@ -20,5 +21,6 @@
 - (void)forceCrash:(CDVInvokedUrlCommand*)command;
 - (void)addMetaData:(CDVInvokedUrlCommand*)command;
 - (void)trackEvent:(CDVInvokedUrlCommand*)command;
+- (void)appId:(CDVInvokedUrlCommand*)command;
 
 @end
