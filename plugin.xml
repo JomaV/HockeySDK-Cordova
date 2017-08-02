@@ -20,10 +20,11 @@
         <clobbers target="hockeyApp" />
     </js-module>
     
-    <preference name="TAGS"/>
+    <preference name="TAGS" default=""/>
 
     <platform name="android">
-        <preference name="ANDROID_APP_ID"/>
+        <preference name="ANDROID_APP_ID" default=""/>
+        <preference name="ANDROID_SECRET" default=""/>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="HockeyApp">
                 <param name="android-package" value="com.zengularity.cordova.hockeyapp.HockeyApp" />
@@ -34,6 +35,9 @@
             <meta-data
               android:name="net.hockeyapp.android.APP_ID"
               android:value="$ANDROID_APP_ID" />
+            <meta-data
+              android:name="net.hockeyapp.android.SECRET"
+              android:value="$ANDROID_SECRET" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -53,7 +57,8 @@
     </platform>
     
     <platform name="ios">
-        <preference name="IOS_APP_ID"/>
+        <preference name="IOS_APP_ID" default=""/>
+        <preference name="IOS_SECRET" default=""/>
         <config-file target="config.xml" parent="/*">
             <feature name="HockeyApp">
                 <param name="ios-package" value="HockeyApp" />
@@ -64,6 +69,9 @@
         </config-file>
         <config-file target="*-Info.plist" parent="HockeyAppId">
             <string>$IOS_APP_ID</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="HockeySecret">
+            <string>$IOS_SECRET</string>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
             <array>
