@@ -36,8 +36,11 @@ import java.util.Calendar;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 
 public class HockeyApp extends CordovaPlugin {
@@ -157,12 +160,61 @@ public class HockeyApp extends CordovaPlugin {
             callbackContext.sendPluginResult(pluginResult);
             return true;
         }
+
+        if (action.equals("appId")) {
+            try {
+                PackageManager packageManager = this.cordova.getActivity().getPackageManager();
+                ApplicationInfo app = null;
+                app = packageManager.getApplicationInfo(this.cordova.getActivity().getPackageName(), PackageManager.GET_META_DATA);
+                Bundle bundle = app.metaData;
+                String message = bundle.getString("net.hockeyapp.android.APP_ID");
+
+                if (message.isEmpty()) {
+                    callbackContext.error("no APP_ID found");
+                    return false;
+                }
+                else {
+                    callbackContext.success(message);
+                    return true;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                callbackContext.error("no APP_ID found");
+                return false;
+            }
+        }
+
+        if (action.equals("secret")) {
+            try {
+                PackageManager packageManager = this.cordova.getActivity().getPackageManager();
+                ApplicationInfo app = null;
+                app = packageManager.getApplicationInfo(this.cordova.getActivity().getPackageName(), PackageManager.GET_META_DATA);
+                Bundle bundle = app.metaData;
+                String message = bundle.getString("net.hockeyapp.android.SECRET");
+
+                if (message.isEmpty()) {
+                    callbackContext.error("no SECRET found");
+                    return false;
+                }
+                else {
+                    callbackContext.success(message);
+                    return true;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                callbackContext.error("no SECRET found");
+                return false;
+            }
+        }
         
         // All other operations require that start() have been called, so check that now
         if (!initialized) {
             callbackContext.error("cordova hockeyapp plugin not initialized, call start() first");
             return false;
         } 
+
+        if (action.equals("resetCredentials")) {
+            callbackContext.success();
+            return true;
+        }
         
         if (action.equals("checkForUpdate")) {
             UpdateManager.register(cordova.getActivity(), appId);
@@ -291,13 +343,6 @@ public class HockeyApp extends CordovaPlugin {
                 callbackContext.success();
                 return true;
             }
-        }
-
-        if (action.equals("appId")) {
-            PackageManager packageManager = this.cordova.getActivity().getPackageManager();
-            ApplicationInfo app = packageManager.getApplicationInfo(this.cordova.getActivity().getPackageName(), PackageManager.GET_META_DATA);
-            Bundle bundle = app.metaData;
-            String message = bundle.getString("net.hockeyapp.android.APP_ID");
         }
 
         // Unrecognized command
