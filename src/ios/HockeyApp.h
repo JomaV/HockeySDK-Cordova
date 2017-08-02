@@ -7,6 +7,7 @@
     BOOL initialized;
     BOOL shouldCreateNewFeedbackThread;
     NSString *appId;
+    NSString *secret;
     NSString *userEmail;
     NSString *userName;
     NSMutableDictionary *crashMetaData;
@@ -22,5 +23,7 @@
 - (void)addMetaData:(CDVInvokedUrlCommand*)command;
 - (void)trackEvent:(CDVInvokedUrlCommand*)command;
 - (void)appId:(CDVInvokedUrlCommand*)command;
+- (void)secret:(CDVInvokedUrlCommand*)command;
+- (void)resetCredentials:(CDVInvokedUrlCommand*)command;
 
 @end

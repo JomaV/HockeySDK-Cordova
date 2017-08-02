@@ -9,6 +9,7 @@
     self = [super init];
     initialized = NO;
     appId = nil;
+    secret = nil;
     userEmail = nil;
     userName = nil;
     crashMetaData = [NSMutableDictionary new];
@@ -55,14 +56,9 @@
             [[BITHockeyManager sharedHockeyManager].authenticator setIdentificationType:authType];
         }
 
-        /*if (authType == BITAuthenticatorIdentificationTypeAnonymous) {*/
-            [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
-            initialized = YES;
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-        /*} else {
-            // Non-anonymous validation will crash the app, so return an error to indicate what is actually happening
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hockeyapp cordova plugin: non-anonymous app validation not currently supported"];
-        }*/
+        [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+        initialized = YES;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     } else {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hockeyapp cordova plugin: missing arguments!"];
     }
@@ -204,6 +200,26 @@
     CDVPluginResult* pluginResult = nil;
     NSString *message = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"HockeyAppId"];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) secret:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult* pluginResult = nil;
+    NSString *message = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"HockeySecret"];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)resetCredentials:(CDVInvokedUrlCommand*)command {
+    CDVPluginResult* pluginResult = nil;
+    if (initialized == YES) {
+        [[BITHockeyManager sharedHockeyManager].authenticator cleanupInternalStorage];
+        initialized = NO;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    }
+    else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"hockeyapp cordova plugin is not started, call hockeyapp.start(successcb, errorcb, appid) first!"];
+    }
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
