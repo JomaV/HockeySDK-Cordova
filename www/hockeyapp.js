@@ -53,6 +53,13 @@ var hockeyapp = {
     appId: function (success, failure) {
         exec(success, failure, "HockeyApp", "appId", []);
     },
+    secret: function (success, failure) {
+        exec(success, failure, "HockeyApp", "secret", []);
+    },
+    resetCredentials: function (success, failure) {
+        if (confirm("Do you want to logout from the hockeyapp?"))
+            exec(success, failure, "HockeyApp", "resetCredentials", []);
+    },
     
     // Valid loginMode values
     loginMode: {
