@@ -37,7 +37,7 @@ cordova platform update ios
 After you've created your [HockeyApp](http://hockeyapp.net) account, and registered your app with the service, you can begin integrating the Cordova plugin into your app by running the following command:
 
 ```shell
-cordova plugin add cordova-plugin-hockeyapp@latest
+cordova plugin add cordova-plugin-hockeyapp --variable ANDROID_APP_ID=<APP_ID> --variable ANDROID_SECRET=<SECRET> --variable=IOS_APP_ID=<APP_ID> --variable IOS_SECRET=<SECRET> --variable TAGS=<TAGS>
 ```
 
 With the plugin installed, configure the HockeyApp plugin with the correct app ID by calling the following function within your `deviceready` handler (or an equivalent location):
@@ -52,7 +52,25 @@ As a reminder, your app ID can be retrieved from the details page of the app wit
 
 <img width="300" src="https://cloud.githubusercontent.com/assets/116461/14294392/b5d4dcea-fb25-11e5-8d36-9bcc76368f86.png" />
 
+Once the APP_ID and SECRET are set to the config file, they can be retrieved from them by calling:
+
+```javascript
+hockeyapp.appId();
+```
+
+or
+
+```javascript
+hockeyapp.secret();
+```
+
 If you would like to test out the crash reporting feature and don't already have a crash in your app (nice job!), you can add the following method call anywhere in your app:
+
+```javascript
+hockeyapp.resetCredentials();
+```
+
+On iOS devices, credentials are stored in keychain by hockeyApp SDK. To be able to delete them and ask them again later, you must call this method.
 
 ```javascript
 hockeyapp.forceCrash();
@@ -132,11 +150,17 @@ The HockeyApp API is exposed to your app via the global `hockeyapp` object, whic
 
 * [**start**](#hockeyappstart) - Initializes the HockeyApp plugin, and configures it with the approrpiate app ID and user settings (e.g. should crash reports be automatically submitted).
 
+* [**resetCredentials**](#hockeyappresetcredentials) - Reset iOS credentials stored in device (in keychain).
+
 * [**trackEvent**](#hockeyapptrackevent) - Logs an app-specific event for analytic purposes.
 
 * [**setUserEmail**](#hockeyappsetuseremail) - Set the users email address.
 
 * [**setUserName**](#hockeyappsetusername) - Set the user name.
+
+* [**appId**](#hockeyappappid) - Retrieve the app id set in the config file.
+
+* [**secret**](#hockeyappsecret) - Retrieve the secret set in the config file.
 
 ### hockeyapp.addMetaData
 
@@ -230,9 +254,52 @@ Initializes the HockeyApp plugin, and configures it with the appropriate app ID 
 
     - `DEVICE`: The end user will only be redirected to the web to register the device UUID that hockeyApp provide and authorizing it.
 
-    *NOTE: on iOS, scheme registration and AppDelegate openURL handling should be implemented as described on iOS SDK guide (https://support.hockeyapp.net/kb/client-integration-ios-mac-os-x-tvos/authenticating-users-on-ios).*
+    *NOTE: on iOS, scheme registration is automated and AppDelegate openURL handling is implemented adding a extension of the AppDelegate. You can see more detail on the iOS SDK guide (https://support.hockeyapp.net/kb/client-integration-ios-mac-os-x-tvos/authenticating-users-on-ios).*
 
 8. **appSecret** - The app secret as provided by the HockeyApp portal. This parameter only needs to be set if you're setting the `loginMode` parameter to `EMAIL_ONLY`.
+
+### hockeyapp.appId
+
+```javascript
+hockeyapp.appId(successCallback: function, errorCallback: function): void
+```
+
+Returns the APP_ID set on config file.
+
+### Parameters
+
+1. **successCallback** - `Function` that will be triggered when the APP_ID has been successfully retrieved from manifest or plist.
+
+2. **errorCallback** - `Function` that will be triggered when retrieval of the APP_ID failed for some reason.
+
+### hockeyapp.secret
+
+```javascript
+hockeyapp.secret(successCallback: function, errorCallback: function): void
+```
+
+Returns the SECRET set on config file.
+
+### Parameters
+
+1. **successCallback** - `Function` that will be triggered when the SECRET has been successfully retrieved from manifest or plist.
+
+2. **errorCallback** - `Function` that will be triggered when retrieval of the SECRET failed for some reason.
+
+### hockeyapp.resetCredentials
+
+```javascript
+hockeyapp.resetCredentials(successCallback: function, errorCallback: function): void
+```
+
+On iOS it resets the keychain stored credentials (uuid, email or username depending on login mode used). On Android, this method does nothing and you should delete you're app data manually.
+
+### Parameters
+
+1. **successCallback** - `Function` that will be triggered when the credentials has been successfully removed.
+
+2. **errorCallback** - `Function` that will be triggered when removal of the credentials failed for some reason.
+
 
 ### hockeyapp.trackEvent
 
